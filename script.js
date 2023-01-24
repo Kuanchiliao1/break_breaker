@@ -1,81 +1,144 @@
-// Initialize game variables
-initializeVariables()
+// Storing all game variables within an object to allow access by the rest of the code
+let gameVariables = initializeVariables()
+console.log(gameVariables)
 
 function initializeVariables() {
+  // 0, 0 should be the center
+  // -250 to 250 x-axis, 500 to -500 y axis
   const ballCoordinates = {x: 0, y: 0};
   const mouseCoordinates = {x: 0, y: 0};
+  const paddleCoordinates = {x: 0, y: 0};
+  const canvasDimensions = {height: 1000, width: 500}
   let ballSize = 1;
   let score = 0;
   let paddleLength = 0;
-  let lives = 3
+  let lives = 3;
+
+  return {
+    ballCoordinates,
+    mouseCoordinates,
+    paddleCoordinates,
+    canvasDimensions,
+    ballSize,
+    score,
+    paddleLength,
+    lives
+  }
 }
+
 // Set up event listeners for user input
 setUpEventListeners()
 
-// Start game loop
-startGameLoop()
+function setUpEventListeners() {
+  const startBtn = document.getElementById("start-button")
+  const score = document.getElementById("score")
+  const bricks = document.querySelectorAll(".brick")
+  
+  // Start the game when clicked
+  startBtn.addEventListener('click', startGame)
+  // Add eventlistener to each brick, not sure what to listen for though
+  bricks.forEach(brick => brick.addEventListener('', addScore))
 
-// Game loop function
-function gameLoop() {
-    // Update game state
-    updateGameState()
+  // Add eventlistener to detect arrow key presses. Not sure if adding eventlistener to window is the best thing to do though
+  window.addEventListener('keydown', function(e) {
+    const key = e.key
 
-    // Clear canvas
-    clearCanvas()
+    // destructure paddleCoordinates from gameVariables
+    const {paddleCoordinates} = gameVariables
+    switch (key) {
+      case "ArrowLeft":
+        if (paddleCoordinates.x > -245) {
+          paddleCoordinates.x -= 5
+        } else {
+          paddleCoordinates.x = -250
+        }
+        break
+      case "ArrowRight":
+        if (paddleCoordinates.x < 245) {
+          paddleCoordinates.x += 5
+        } else {
+          paddleCoordinates.x = 250
+        }
+        break
+    }
+    console.log(paddleCoordinates.x)
+  })
 
-    // Draw elements on canvas
-    drawElements()
+  function addScore() {
+    score += 1;
+  }
 
-    // Check for collisions
-    checkForCollisions()
-
-    // Check for game over
-    checkForGameOver()
-
-    // Repeat game loop
-    requestAnimationFrame(gameLoop)
+  function startGame() {
+    // Not sure how to do this part
+    initializeVariables()
+    startBtn.hidden = true;
+  }
 }
 
-// Update game state function
-function updateGameState() {
-    // Move ball
-    moveBall()
+// // Start game loop
+// startGameLoop()
 
-    // Move paddle
-    movePaddle()
-}
+// // Game loop function
+// function gameLoop() {
+//     // Update game state
+//     updateGameState()
 
-// Clear canvas function
-function clearCanvas() {
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-}
+//     // Clear canvas
+//     clearCanvas()
 
-// Draw elements function
-function drawElements() {
-    // Draw ball
-    drawBall()
+//     // Draw elements on canvas
+//     drawElements()
 
-    // Draw paddle
-    drawPaddle()
+//     // Check for collisions
+//     checkForCollisions()
 
-    // Draw bricks
-    drawBricks()
-}
+//     // Check for game over
+//     checkForGameOver()
 
-// Check for collisions function
-function checkForCollisions() {
-    // Check for ball collision with paddle
-    checkForBallPaddleCollision()
+//     // Repeat game loop
+//     requestAnimationFrame(gameLoop)
+// }
 
-    // Check for ball collision with bricks
-    checkForBallBrickCollision()
-}
+// // Update game state function
+// function updateGameState() {
+//     // Move ball
+//     moveBall()
 
-// Check for game over function
-function checkForGameOver() {
-    // Check if player has lost all lives
-    // Check if player has broken all bricks
+//     // Move paddle
+//     movePaddle()
+// }
 
-    // If game over, show game over screen
-}
+// // Clear canvas function
+// function clearCanvas() {
+//     // Clear canvas
+//     ctx.clearRect(0, 0, canvas.width, canvas.height)
+// }
+
+// // Draw elements function
+// function drawElements() {
+//     // Draw ball
+//     drawBall()
+
+//     // Draw paddle
+//     drawPaddle()
+
+//     // Draw bricks
+//     drawBricks()
+// }
+
+// // Check for collisions function
+// function checkForCollisions() {
+//     // Check for ball collision with paddle
+//     checkForBallPaddleCollision()
+
+//     // Check for ball collision with bricks
+//     checkForBallBrickCollision()
+// }
+
+// // Check for game over function
+// function checkForGameOver() {
+//     // Check if player has lost all lives
+//     // Check if player has broken all bricks
+
+//     // If game over, show game over screen
+// }
